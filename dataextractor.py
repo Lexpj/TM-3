@@ -9,8 +9,11 @@ def get_data(test_size=0.2, val_size=0.2, seed=None, print_stats=True):
     FILES = [PATH+f for f in listdir(PATH) if isfile(join(PATH, f))]
     DFS = pd.concat([pd.read_csv(file,sep="\t",names=['ID',"label",'text']) for file in FILES[:9]+FILES[10:]])
     # There is something wrong with the file twitter-2016test-A.tsv
-    # We do not know why or how, but importing it separately and concatenating seems to work
-    file10 = pd.read_csv(FILES[10],sep="\t",names=['ID',"label",'text'])
+    # This is due to this file having an extra column due to the line ending in \t. Therefore, we drop this last column
+    file10 = pd.read_csv(FILES[9],sep="\t")
+    file10.columns = ['ID',"label",'text','nan']
+    file10 = file10.drop(columns=['nan'])
+    
     DFS = pd.concat([DFS, file10])
     
     y = DFS['label']
