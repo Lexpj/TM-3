@@ -3,7 +3,7 @@ from os import listdir
 from os.path import isfile, join
 from sklearn.model_selection import train_test_split
 
-def get_data(test_size=0.2, val_size=0.2, seed=None, print_stats=True):
+def get_data(test_size=0.2, val_size=0.2, seed=None, print_stats=True, return_DF=False):
     
     PATH = "./semeval-2017-tweets_Subtask-A/downloaded/"
     FILES = [PATH+f for f in listdir(PATH) if isfile(join(PATH, f))]
@@ -15,6 +15,8 @@ def get_data(test_size=0.2, val_size=0.2, seed=None, print_stats=True):
     file10 = file10.drop(columns=['nan'])
     
     DFS = pd.concat([DFS, file10])
+    
+    if return_DF: return DFS
     
     y = DFS['label']
     X = DFS.drop(columns=['label'])
